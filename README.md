@@ -1,5 +1,5 @@
 # ContactApp-AngularAndDotNet
-Contact App using Angular 17.2, DotNet Core Web API 5.0
+Contact App using Angular 17.2, DotNet Core Web API 5.0 and SQL Server.
 
 # Project Info
 1. Application using Angular application. Mobile optimized using bootstrap.
@@ -13,3 +13,8 @@ On Submit, the application will navigate back to List view and this new contact 
 6. Used JWT Token Authorization.
 7. Used Logger using Nlogg or Serilog. Using API and UI.
 8. Unit test application for API.
+
+# Projct List
+1. ContactApp
+2. ContactAPI
+
