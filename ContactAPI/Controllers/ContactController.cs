@@ -1,12 +1,12 @@
 ﻿using ContactAPI.Contracts;
 using ContactAPI.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ContactAPI.Controllers
 {
@@ -15,25 +15,30 @@ namespace ContactAPI.Controllers
     public class ContactController : ControllerBase
     {
 		private readonly IContactRepository _contactRepo;
+		private readonly ILoggerManager _logger;
 
-		public ContactController(IContactRepository contactRepo)
+		public ContactController(IContactRepository contactRepo, ILoggerManager logger)
 		{
 			_contactRepo = contactRepo;
+			_logger = logger;
 		}
 
 
 		// GET: Contact/GetContactList
 		[HttpGet("GetContactList")]
+		//[Authorize]
 		public async Task<IActionResult> GetContacts()
 		{
 			try
 			{
+				
 				var contacts = await _contactRepo.GetContacts();
 				return Ok(contacts);
 			}
 			catch (Exception ex)
 			{
 				//log error
+				_logger.LogError("Error in GetContacts : " + ex.Message);
 				return StatusCode(500, ex.Message);
 			}
 		}
@@ -53,6 +58,7 @@ namespace ContactAPI.Controllers
 			catch (Exception ex)
 			{
 				//log error
+				_logger.LogError("Error in GetContactById : " + ex.Message);
 				return StatusCode(500, ex.Message);
 			}
 		}
@@ -70,6 +76,7 @@ namespace ContactAPI.Controllers
 			catch (Exception ex)
 			{
 				//log error
+				_logger.LogError("Error in AddContact : " + ex.Message);
 				return StatusCode(500, ex.Message);
 			}
 		}
@@ -83,7 +90,10 @@ namespace ContactAPI.Controllers
 			{
 				var dbContact = await _contactRepo.GetContact(contactId);
 				if (dbContact == null)
+				{
+					_logger.LogError("UpdateContact: Data NotFound");
 					return NotFound();
+				}
 
 				await _contactRepo.UpdateContact(contactId, contact);
 				return NoContent();
@@ -91,6 +101,7 @@ namespace ContactAPI.Controllers
 			catch (Exception ex)
 			{
 				//log error
+				_logger.LogError("Error in UpdateContact : " + ex.Message);
 				return StatusCode(500, ex.Message);
 			}
 		}
@@ -107,11 +118,13 @@ namespace ContactAPI.Controllers
 					return NotFound();
 
 				await _contactRepo.DeleteContact(contactId);
+				_logger.LogInfo("DeleteContact success. contactId: " + contactId);
 				return NoContent();
 			}
 			catch (Exception ex)
 			{
 				//log error
+				_logger.LogError("Error in DeleteContact : " + ex.Message);
 				return StatusCode(500, ex.Message);
 			}
 		}

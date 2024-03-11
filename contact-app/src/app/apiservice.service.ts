@@ -25,7 +25,7 @@ export class ApiserviceService {
   // update Contact
   updateContact(contact: any): Observable<any> {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.http.put<any>(this.apiUrl + 'Contact/UpdateContact/', contact, httpOptions);
+    return this.http.put<any>(this.apiUrl + 'Contact/UpdateContact/' + contact.contactId, contact, httpOptions);
   }
 
   // delete Contact
