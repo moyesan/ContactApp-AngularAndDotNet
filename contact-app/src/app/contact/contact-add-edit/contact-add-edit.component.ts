@@ -11,13 +11,9 @@ export class ContactAddEditComponent {
   constructor(private service: ApiserviceService) { }
   
   @Input() contactItem: any;
-  EmployeeId = "";
-  EmployeeName = "";
-  Department = "";
-  DateOfJoining = "";
-  PhotoFileName = "";
-  PhotoFilePath = "";
-  DepartmentList: any = [];
+  ContactId = "";
+  ContactName = "";
+  ContactList: any = [];
 
 
   ngOnInit(): void {
@@ -27,17 +23,17 @@ export class ContactAddEditComponent {
   loadEmployeeList() {
 
     this.service.getContactList().subscribe((data: any) => {
-      this.DepartmentList = data;
+      this.ContactList = data;
 
-      this.EmployeeId = this.contactItem.ContactId;
-      this.EmployeeName = this.contactItem.FirstName;
+      this.ContactId = this.contactItem.contactId;
+      this.ContactName = this.contactItem.firstName;
     });
   }
 
   addEmployee() {
     var val = {
-      EmployeeId: this.EmployeeId,
-      EmployeeName: this.EmployeeName
+      ContactId: this.ContactId,
+      ContactName: this.ContactName
     };
 
     this.service.addContact(val).subscribe(res => {
@@ -47,12 +43,20 @@ export class ContactAddEditComponent {
 
   updateEmployee() {
     var val = {
-      EmployeeId: this.EmployeeId,
-      EmployeeName: this.EmployeeName
+      contactId: this.ContactId,
+      firstName: this.ContactName,
+      lastName: this.ContactName,
     };
 
     this.service.updateContact(val).subscribe(res => {
-      alert(res.toString());
+        if(!res){
+          alert('Successfully updated!');
+        }else{
+          alert('Invalid data!');
+        }
+
+        this.loadEmployeeList();
+        document.getElementById("updateClose")?.click();
     });
   }
 
