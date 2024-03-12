@@ -1,15 +1,58 @@
-<div class="d-flex flex-row bd-highlight mb-3">
-    <div class="p-2 w-50 bd-highlight">
-      <div class="input-group mb-3">
-        <span class="input-group-text">Name</span>
-        <input type="text" class="form-control" [(ngModel)]="ContactName">
+
+<form class="form-validation">
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <div class="p-2 bd-highlight">
+      
+      <div class="input-group mb-3" *ngIf="contactItem.contactId==''">
+        <span class="input-group-text">Contact Id</span>
+        <input type="text" class="form-control" id="ContactId" name="ContactId" [(ngModel)]="ContactId" 
+        required minlength="4" maxlength="4">
+        <div class="invalid-feedback">Minimum lenth is 4.</div>
       </div>
+      
+      <div class="input-group mb-3">
+        <span class="input-group-text">First Name</span>
+        <input type="text" class="form-control" id="FirstName" name="FirstName"  [(ngModel)]="FirstName" 
+        required minlength="1" maxlength="100">        
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Last Name</span>
+        <input type="text" class="form-control" id="LastName" name="LastName"  [(ngModel)]="LastName" 
+        required minlength="1" maxlength="100">        
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Email</span>
+        <input type="email" class="form-control" id="Email" name="Email"  [(ngModel)]="Email" 
+        required minlength="3" maxlength="100">        
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">PhoneNumber</span>
+        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber"  [(ngModel)]="PhoneNumber" 
+        maxlength="12">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Address</span>
+        <input type="text" class="form-control" id="Address" name="Address"  [(ngModel)]="Address" 
+        maxlength="100">        
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+
     </div> 
   </div>
-  <button type="button" (click)="addEmployee()" *ngIf="contactItem.contactId=='0'" class="btn btn-primary">
+ 
+  <button type="button" (click)="validate(true)" *ngIf="contactItem.contactId==''" class="btn btn-primary">
     Create
   </button>
   
-  <button type="button" (click)="updateEmployee()" *ngIf="contactItem.contactId!='0'" class="btn btn-primary">
+  <button type="button" (click)="validate(false)" *ngIf="contactItem.contactId!=''" class="btn btn-primary">
     Update
   </button>
+
+</form>

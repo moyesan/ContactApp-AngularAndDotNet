@@ -1,12 +1,8 @@
-.clsAction, .clsActionHeader{
-    width: 50px;
-    max-width: 50px;
-    float: right;
-    margin-right: 10px;
+
+th{
+min-width: 150px;
 }
 
-.clsActionHeader{
-    text-align: right;    
-    float: right;   
-    padding-right: 95px;
+.action-button{
+    margin-right: 10px;
 }

@@ -71,7 +71,8 @@ namespace ContactAPI.Controllers
 			try
 			{
 				var createdContact = await _contactRepo.CreateContact(contact);
-				return CreatedAtRoute("ContactById", new { contactId = createdContact.ContactId }, createdContact);
+				//return CreatedAtRoute("ContactById", new { contactId = createdContact.ContactId }, createdContact);
+				return NoContent();
 			}
 			catch (Exception ex)
 			{

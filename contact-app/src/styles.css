@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+.body-content{
+    margin: 70px 30px
+}
+
+a { cursor: pointer; }
+
+.input-group-text{
+    width: 120px;
+}
+
+.img-action{
+    width: 16px;
+}
+

@@ -12,40 +12,75 @@ export class ContactAddEditComponent {
   
   @Input() contactItem: any;
   ContactId = "";
-  ContactName = "";
+  FirstName = "";
+  LastName = "";
+  Email = "";
+  PhoneNumber = "";
+  Address = ""
   ContactList: any = [];
 
 
   ngOnInit(): void {
-    this.loadEmployeeList();
+    this.loadContactList();
+  }  
+
+  validate(isAdd: boolean){
+    var form = document.getElementsByClassName('form-validation')[0] as HTMLFormElement;
+   
+    if (form.checkValidity() === false) {
+      form.classList.add('was-validated');
+    } else{
+      if(isAdd)
+        this.addContact();
+      else
+        this.updateContact();
+    }    
   }
 
-  loadEmployeeList() {
+  loadContactList() {
 
     this.service.getContactList().subscribe((data: any) => {
       this.ContactList = data;
 
       this.ContactId = this.contactItem.contactId;
-      this.ContactName = this.contactItem.firstName;
+      this.FirstName = this.contactItem.firstName;
+      this.LastName = this.contactItem.lastName;
+      this.Email = this.contactItem.email;
+      this.PhoneNumber = this.contactItem.phoneNumber;
+      this.Address = this.contactItem.address;
     });
   }
 
-  addEmployee() {
+  addContact() {
     var val = {
-      ContactId: this.ContactId,
-      ContactName: this.ContactName
+      contactId: this.ContactId,
+      firstName: this.FirstName,
+      lastName: this.LastName,
+      email: this.Email,
+      phoneNumber: this.PhoneNumber,
+      address: this.Address,
     };
 
     this.service.addContact(val).subscribe(res => {
-      alert(res.toString());
+      if(!res){
+        alert('Successfully updated!');
+      }else{
+        alert('Invalid data!');
+      }
+
+      this.loadContactList();
+      document.getElementById("addEditModalClose")?.click();
     });
   }
 
-  updateEmployee() {
+  updateContact() {
     var val = {
       contactId: this.ContactId,
-      firstName: this.ContactName,
-      lastName: this.ContactName,
+      firstName: this.FirstName,
+      lastName: this.LastName,
+      email: this.Email,
+      phoneNumber: this.PhoneNumber,
+      address: this.Address
     };
 
     this.service.updateContact(val).subscribe(res => {
@@ -55,8 +90,8 @@ export class ContactAddEditComponent {
           alert('Invalid data!');
         }
 
-        this.loadEmployeeList();
-        document.getElementById("updateClose")?.click();
+        this.loadContactList();
+        document.getElementById("addEditModalClose")?.click();
     });
   }
 
