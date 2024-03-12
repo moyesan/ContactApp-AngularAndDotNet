@@ -34,6 +34,7 @@ namespace ContactAppTest
         [Fact]
         public void GetContacts()
         {
+
             // Arrange
             //Act
             var result = _controller.GetContacts();

@@ -20,7 +20,7 @@ namespace ContactAPI.Repository
 
         public async Task<IEnumerable<Contact>> GetContacts()
         {
-            var query = "SELECT * FROM tblContact";
+            var query = "SELECT * FROM tblContact ORDER BY ContactId";
             using (var connection = _context.CreateConnection())
             {
                 var companies = await connection.QueryAsync<Contact>(query);
@@ -40,13 +40,17 @@ namespace ContactAPI.Repository
 
         public async Task<Contact> CreateContact(ContactDTO contact)
         {
-            var query = "INSERT INTO tblContact (ContactId, FirstName, LastName) VALUES (@ContactId, @FirstName, @LastName)" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var query = "INSERT INTO tblContact (ContactId, FirstName, LastName, Email, PhoneNumber, Address)" +
+                " VALUES (@ContactId, @FirstName, @LastName, @Email, @PhoneNumber, @Address)" +
+                " SELECT CAST(SCOPE_IDENTITY() as int)";
 
             var parameters = new DynamicParameters();
             parameters.Add("ContactId", contact.ContactId, DbType.Int32);
             parameters.Add("FirstName", contact.FirstName, DbType.String);
             parameters.Add("LastName", contact.LastName, DbType.String);
+            parameters.Add("Email", contact.Email, DbType.String);
+            parameters.Add("PhoneNumber", contact.PhoneNumber, DbType.String);
+            parameters.Add("Address", contact.LastName, DbType.String);
 
             using (var connection = _context.CreateConnection())
             {
@@ -56,7 +60,10 @@ namespace ContactAPI.Repository
                 {
                     ContactId = contact.ContactId,
                     FirstName = contact.FirstName,
-                    LastName = contact.LastName
+                    LastName = contact.LastName,
+                    Email = contact.Email,
+                    PhoneNumber = contact.PhoneNumber,
+                    Address = contact.Address
                 };
                 return createdContact;
             }
@@ -64,12 +71,17 @@ namespace ContactAPI.Repository
 
         public async Task UpdateContact(int contactId, ContactUpadteDTO Contact)
         {
-            var query = "UPDATE tblContact SET FirstName = @FirstName, LastName = @LastName WHERE ContactId = @ContactId";
+            var query = "UPDATE tblContact SET FirstName = @FirstName, LastName = @LastName, Email = @Email, PhoneNumber = @PhoneNumber, Address = @Address" +
+                " WHERE ContactId = @ContactId";
 
             var parameters = new DynamicParameters();
             parameters.Add("ContactId", contactId, DbType.Int32);
             parameters.Add("FirstName", Contact.FirstName, DbType.String);
             parameters.Add("LastName", Contact.LastName, DbType.String);
+            parameters.Add("Email", Contact.Email, DbType.String);
+            parameters.Add("PhoneNumber", Contact.PhoneNumber, DbType.String);
+            parameters.Add("Address", Contact.Address, DbType.String);
+
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);

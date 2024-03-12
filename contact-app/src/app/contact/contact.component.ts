@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiserviceService } from '../apiservice.service';
 
-
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -13,8 +12,12 @@ export class ContactComponent {
 
   ContactList: any = [];
   ModalTitle = "";
-  ActivateAddEditEmpComp: boolean = false;
+  ActivateAddEditContactComp: boolean = false;
   contactItem: any;
+
+  sortProperty: string = 'contactId';
+  sortOrder = 1;
+  loading = false;
 
   ngOnInit(): void {
     this.refreshConactList();
@@ -22,20 +25,21 @@ export class ContactComponent {
 
   addClick() {
     this.contactItem = {
-      EmployeeId: "0",
-      EmployeeName: "",
-      Department: "",
-      DateOfJoining: "",
-      PhotoFileName: "anonymous.png"
+      contactId: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      address: ""
     }
-    this.ModalTitle = "Add Employee";
-    this.ActivateAddEditEmpComp = true;
+    this.ModalTitle = "Add Contact";
+    this.ActivateAddEditContactComp = true;
   }
 
   editClick(item: any) {
     this.contactItem = item;
     this.ModalTitle = "Edit Contact";
-    this.ActivateAddEditEmpComp = true;
+    this.ActivateAddEditContactComp = true;
   }
 
   deleteClick(item: any) {
@@ -49,7 +53,7 @@ export class ContactComponent {
   }
 
   closeClick() {
-    this.ActivateAddEditEmpComp = false;
+    this.ActivateAddEditContactComp = false;
     this.refreshConactList();
   }
 
@@ -59,6 +63,31 @@ export class ContactComponent {
       console.log(data)
       this.ContactList = data;
     });
+  }
+  
+
+  // sorting ///////////////////////////////
+  sortBy(property: string) {
+    this.sortOrder = property === this.sortProperty ? (this.sortOrder * -1) : 1;
+    this.sortProperty = property;
+    this.ContactList = [...this.ContactList.sort((a: any, b: any) => {
+        // sort comparison function
+        let result = 0;
+        if (a[property] < b[property]) {
+            result = -1;
+        }
+        if (a[property] > b[property]) {
+            result = 1;
+        }
+        return result * this.sortOrder;
+    })];
+  }
+
+  sortIcon(property: string) {
+      if (property === this.sortProperty) {
+          return this.sortOrder === 1 ? '☝️' : '👇';
+      }
+      return '';
   }
 
 }
